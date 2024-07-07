@@ -1,16 +1,31 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import { z } from 'zod'
 
 import { CategoriesService } from "../services/categories.services";
+import { CategoriesRepository } from "../database/reposiories/categories.repository";
+import { CategoryModel } from "../database/schemas/category.schema";
+import { CreateCategoriyDTO } from "../dtos/categories.tdo";
+import { StatusCodes } from "http-status-codes";
 
 export class CategoriesController {
-    async create(_: Request, res: Response) {
+    async create(req: Request<unknown, unknown, CreateCategoriyDTO>, res: Response, next: NextFunction,) {
+        try {
 
-        const services = new CategoriesService();
-
-        const result = await services.create()
-
+            const { color, title } = req.body
 
 
-        return res.status(200).json(result)
+            const respository = new CategoriesRepository(CategoryModel)
+            const service = new CategoriesService(respository);
+
+            const result = await service.create({ color, title })
+
+
+
+            return res.status(StatusCodes.CREATED).json(result)
+        } catch (err) {
+            next(err)
+        }
+
+
     }
 }
