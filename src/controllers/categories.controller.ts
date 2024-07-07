@@ -18,7 +18,7 @@ export class CategoriesController {
             const service = new CategoriesService(respository);
 
             const result = await service.create({ color, title })
-            const result = await service.create({ color, title })
+
 
 
 
