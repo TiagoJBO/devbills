@@ -1,17 +1,17 @@
     ESTRUTURANDO   API BACK END
 
-# Criar transações
+# Criar transações(Done)
 
     	- id_ categoria, nome, valor, date, tipo
 
-# Listar as transações com filtros
+# Listar as transações com filtros(Done)
 
     	-por nome
 
 -     -por período (início e fim)
       -por categorias
 
-# Dados de saldo com filtros.
+# Dados de saldo com filtros.*
 
     	-por períodos (inicio e fim).
 

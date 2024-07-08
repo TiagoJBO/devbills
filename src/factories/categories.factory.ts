@@ -12,8 +12,8 @@ export class CategoriesFacatory {
             return this.CategoriesService
         }
 
-        const Repository = new CategoriesRepository(CategoryModel)
-        const service = new CategoriesService(Repository)
+        const repository = new CategoriesRepository(CategoryModel)
+        const service = new CategoriesService(repository)
 
         this.CategoriesService = service
 
