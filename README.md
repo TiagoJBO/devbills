@@ -1,13 +1,15 @@
     ESTRUTURANDO   API BACK END
 
+# Criar transações
+
+    	- id_ categoria, nome, valor, date, tipo
+
 # Listar as transações com filtros
 
     	-por nome
 
 -     -por período (início e fim)
       -por categorias
-
-# Listar as categorias.
 
 # Dados de saldo com filtros.
 
@@ -21,11 +23,11 @@
 
     	- por nome
 
-# Criar categorias
+---
+
+# Listar as categorias.(Done)
+
+# Criar categorias (Done)
 
     	-nome, cor
     	-Não é possível criar categorias com mesma nome
-
-# Criar transações
-
-    	-categoria, nome, valor, date, tipo
