@@ -1,8 +1,10 @@
+
 import { CreateCategoriyDTO } from "../../dtos/categories.tdo"
 import { getDashboardDTO, IndexTransactionsDTO } from "../../dtos/transactions.dto"
 import { Balance } from "../../entities/balance.entity"
-import { Transaction } from "../../entities/transactions.entity"
+import { Transaction, TransactionType } from "../../entities/transactions.entity"
 import { TransactionModel } from "../schemas/transactions.schema"
+import { Expense } from "../../entities/expense.entity"
 
 export class TransationsRepository {
 
@@ -29,8 +31,8 @@ export class TransationsRepository {
             }
         }
         const transactions = await this.model.find(whereParams, undefined, {
-            sort:{
-                date:-1
+            sort: {
+                date: -1
             }
 
         })
@@ -92,5 +94,39 @@ export class TransationsRepository {
 
         return result
     }
+    async getExpenses({ beginDate, endDate }: getDashboardDTO): Promise<Expense[]> {
+        const aggregate = this.model.aggregate<Expense>()
+        const matchParams: Record<string, unknown> = {
+            type: TransactionType.EXPENSE
+        }
+
+        if (beginDate || endDate) {
+
+            matchParams.date = {
+                ...(beginDate && { $gte: beginDate }),
+                ...(endDate && { $lte: endDate }),
+
+            }
+
+        }
+        const result = await aggregate.match(matchParams).group({
+
+            _id: '$category._id',
+            title: {
+                $first: '$category.title'
+            },
+            color: {
+                $first: '$category.color'
+            },
+            amount: {
+                $sum: '$amount',
+            }
+        });
+
+
+        return result
+
+    }
 }
+
 

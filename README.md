@@ -11,11 +11,11 @@
 -     -por período (início e fim)
       -por categorias
 
-# Dados de saldo com filtros.*
+# Dados de saldo com filtros.(Done)
 
     	-por períodos (inicio e fim).
 
-# Dados de despesas por categorias com filtros
+# Dados de despesas por categorias com filtros(Done)
 
     	-por período
 
