@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { createTransactionsSchema, getDashboardSchema, indexTransactionSchema } from "../dtos/transactions.dto"
+import { createTransactionsSchema, getDashboardSchema, getFinacialEvolutionSchema, indexTransactionSchema } from "../dtos/transactions.dto"
 import { ParamsType, validator } from "../middleware/validator.middleware"
 import { TransactionsController } from "../controllers/transaction.controlle"
 import { transactionsFactory } from "../factories/transactions.factory"
@@ -27,3 +27,8 @@ transactionRoutes.get('/dashboard', validator({
     schema: getDashboardSchema,
     type: ParamsType.QUERY
 }), controller.getDashboard)
+
+transactionRoutes.get('/financial-evolution', validator({
+    schema: getFinacialEvolutionSchema,
+    type: ParamsType.QUERY
+}), controller.getFinantialEvolution)

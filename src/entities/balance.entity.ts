@@ -16,6 +16,5 @@ export class Balance {
         this.incomes = incomes
         this.expense = expense
         this.balance = balance
-    }
-
+    } 
 }

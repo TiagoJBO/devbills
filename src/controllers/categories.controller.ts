@@ -5,12 +5,13 @@ import { CategoriesService } from "../services/categories.services";
 
 import { CreateCategoriyDTO } from "../dtos/categories.tdo";
 import { StatusCodes } from "http-status-codes";
+import { BodyRequest } from "./type";
 
 export class CategoriesController {
 
     constructor(private categoriesService: CategoriesService) { }
 
-    create = async (req: Request<unknown, unknown, CreateCategoriyDTO>, res: Response, next: NextFunction,) => {
+    create = async (req: BodyRequest< CreateCategoriyDTO>, res: Response, next: NextFunction,) => {
         try {
 
             const { color, title } = req.body

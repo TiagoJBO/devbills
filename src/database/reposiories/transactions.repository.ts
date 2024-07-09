@@ -1,10 +1,11 @@
 
 import { CreateCategoriyDTO } from "../../dtos/categories.tdo"
-import { getDashboardDTO, IndexTransactionsDTO } from "../../dtos/transactions.dto"
-import { Balance } from "../../entities/balance.entity"
+import { GetDashboardDTO, GetFinacialEvolutionDTO, IndexTransactionsDTO } from "../../dtos/transactions.dto"
+
 import { Transaction, TransactionType } from "../../entities/transactions.entity"
 import { TransactionModel } from "../schemas/transactions.schema"
 import { Expense } from "../../entities/expense.entity"
+import { Balance } from "../../entities/balance.entity"
 
 export class TransationsRepository {
 
@@ -44,7 +45,7 @@ export class TransationsRepository {
         return transactionsMap
     }
 
-    async getBalance({ beginDate, endDate }: getDashboardDTO): Promise<Balance> {
+    getBalance = async ({ beginDate, endDate }: GetDashboardDTO): Promise<Balance> => {
         const aggregate = this.model.aggregate<Balance>()
 
         if (beginDate || endDate) {
@@ -77,7 +78,8 @@ export class TransationsRepository {
                         0
                     ]
                 }
-            }).group({
+            })
+            .group({
                 _id: null,
                 incomes: {
                     $sum: "$income"
@@ -85,7 +87,8 @@ export class TransationsRepository {
                 expense: {
                     $sum: "$expense"
                 }
-            }).addFields({
+            })
+            .addFields({
                 balance: {
                     $subtract: ["$incomes", "$expense"]
                 }
@@ -94,7 +97,7 @@ export class TransationsRepository {
 
         return result
     }
-    async getExpenses({ beginDate, endDate }: getDashboardDTO): Promise<Expense[]> {
+    async getExpenses({ beginDate, endDate }: GetDashboardDTO): Promise<Expense[]> {
         const aggregate = this.model.aggregate<Expense>()
         const matchParams: Record<string, unknown> = {
             type: TransactionType.EXPENSE
@@ -122,6 +125,66 @@ export class TransationsRepository {
                 $sum: '$amount',
             }
         });
+
+
+        return result
+
+    }
+
+    async getFinancialEvolution({ year }: GetFinacialEvolutionDTO): Promise<Balance[]> {
+        const aggregate = this.model.aggregate<Balance>()
+
+        const result = await aggregate
+            .match({
+                date: {
+                    $gte: new Date(`${year}-01-01`),
+                    $lte: new Date(`${year}-12-31`),
+                }
+            })
+            .project({
+                _id: 0,
+                income: {
+                    $cond: [
+                        {
+                            $eq: ["$type", "income"]
+                        },
+                        "$amount",
+                        0
+                    ]
+                },
+                expense: {
+                    $cond: [
+                        {
+                            $eq: ["$type", "expense"]
+                        },
+                        "$amount",
+                        0
+                    ]
+                },
+                year: {
+                    $year: '$date',
+                },
+                month: {
+                    $month: '$date',
+                }
+            })
+            .group({
+                _id: ['$year', '$month'],
+                incomes: {
+                    $sum: "$income"
+                },
+                expense: {
+                    $sum: "$expense"
+                }
+            })
+            .addFields({
+                balance: {
+                    $subtract: ["$incomes", "$expense"]
+                }
+            })
+            .sort({
+                _id: 1
+            })
 
 
         return result

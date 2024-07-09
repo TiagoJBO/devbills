@@ -29,4 +29,11 @@ export const getDashboardSchema = {
     endDate: z.coerce.date().optional(),
 }
 const getDashboardObject = z.object(getDashboardSchema)
-export type getDashboardDTO = z.infer<typeof getDashboardObject>
+export type GetDashboardDTO = z.infer<typeof getDashboardObject>
+
+export const getFinacialEvolutionSchema = {
+    year: z.string()
+}
+
+const getFinancialEvolutionObject = z.object(getFinacialEvolutionSchema)
+export type GetFinacialEvolutionDTO = z.infer<typeof getFinancialEvolutionObject>
